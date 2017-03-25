@@ -12,7 +12,7 @@ def parse_train_data(path='data/train.csv'):
     :param path: path to train.csv
     :return: Pandas DataFrame
     """
-    data = pd.read_csv(path)
+    data = pd.read_csv(path, index_col=0)
     return data
 
 
