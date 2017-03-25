@@ -31,7 +31,7 @@ def test_model(det_model, path='data/test'):
         result.append((i, res,))
         i += 1
 
-    with open('output/%s' % det_model, 'w+') as output:
+    with open('output/{0}.csv'.format(det_model), 'w+') as output:
         writer = csv.writer(output, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerows(result)

@@ -9,10 +9,9 @@ class MeansModel(AbstractModel.AbstractModel):
     def test(self, dataset):
         # normalization.z_normalize(dataset)
         subed = np.abs(dataset.sub(self.means))
-        sumed = np.cumsum(subed, axis=0)
+        sumed = subed.sum(axis=1)
+        result = sumed.idxmax() if not sumed.empty else -1
         print("Tested")
-        result = sumed.idxmax()
-        print(result)
         return result
 
     def train(self):
