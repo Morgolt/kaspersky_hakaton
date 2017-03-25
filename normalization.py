@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.preprocessing import scale
 
 import utils
+import numpy as np
 
 
 def correlation(dataset):
