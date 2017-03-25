@@ -6,7 +6,7 @@ import pandas as pd
 from AbstractModel import AbstractModel
 
 
-def parse_train_data(path):
+def parse_train_data(path='data/train.csv'):
     """
     Read training data.
     :param path: path to train.csv
@@ -16,7 +16,7 @@ def parse_train_data(path):
     return data
 
 
-def test_model(det_model, path):
+def test_model(det_model, path='data/test'):
     """
     Writes results file under the name of model
     :param det_model: Fitted model, should implement AbstractModel
