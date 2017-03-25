@@ -1,5 +1,6 @@
 import csv
 import os
+from collections import OrderedDict
 
 import pandas as pd
 
@@ -25,9 +26,10 @@ def test_model(det_model, path='data/test'):
     result = []
     i = 0
     for tst_file in os.listdir(path):
-        print("testfile")
-        test_data = parse_train_data(os.path.join(path, tst_file))
-        result.append((i, det_model.test(test_data),))
+        test_data = pd.read_csv(os.path.join(path, tst_file), index_col=0)
+        res = det_model.test(test_data)
+        print(res)
+        result.append((i, res,))
         i += 1
 
     with open('output/{0}.csv'.format(det_model), 'w+') as output:
@@ -35,8 +37,18 @@ def test_model(det_model, path='data/test'):
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerows(result)
 
+def mean_all_answers():
+    frames = []
+    for answ_file in os.listdir('output'):
+        frames.append(pd.read_csv(os.path.join('output', answ_file), index_col=0))
+    concated_frame = pd.concat(frames, axis=1)
+    print(concated_frame)
+    result = concated_frame.mean(axis=1)
+    print(result)
+    result.to_csv('output/meaned.csv')
 
 if __name__ == '__main__':
     # parse_data('data/train.csv')
-    model = AbstractModel()
-    test_model(model, 'data/test')
+    # model = AbstractModel()
+    # test_model(model, 'data/test')
+    mean_all_answers()
