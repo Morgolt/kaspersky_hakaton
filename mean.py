@@ -1,18 +1,29 @@
 import AbstractModel
 import utils
 import numpy as np
-import math
+import normalization
+import pandas
 
-class MyAbstractModel(AbstractModel.AbstractModel):
+class MeansModel(AbstractModel.AbstractModel):
 
     def test(self, dataset):
+        # normalization.z_normalize(dataset)
+        subed = np.abs(dataset.sub(self.means))
+        sumed = np.cumsum(subed, axis=0)
+        print("Tested")
+        result = sumed.idxmax()
+        print(result)
+        return result
+
+    def train(self):
+        data = utils.parse_train_data('data/train.csv')
+        normalization.make_correlation_free_set(data)
+        # normalization.z_normalize(data)
+        self.means = data.mean()
+        print("Trained")
 
 
 if __name__ == "__main__":
-    data = utils.parse_train_data('data/train_reduced.csv')
-    means = {key: val.mean() for key, val in data.iteritems() if key != 'Time'}
-    for key, val in means.i
-    col = np.array(data['tag00'])
-    col -= means['tag00']
-    col = math.fabs(col)
-    print(max(col))
+    model = MeansModel()
+    model.train()
+    utils.test_model(model)

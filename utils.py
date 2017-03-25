@@ -25,8 +25,10 @@ def test_model(det_model, path='data/test'):
     result = []
     i = 0
     for tst_file in os.listdir(path):
-        test_data = pd.read_csv(os.path.join(path, tst_file))
-        result.append((i, det_model.test(test_data),))
+        test_data = pd.read_csv(os.path.join(path, tst_file), index_col=0)
+        res = det_model.test(test_data)
+        print(res)
+        result.append((i, res,))
         i += 1
 
     with open('output/%s' % det_model, 'w+') as output:
