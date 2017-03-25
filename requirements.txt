@@ -6,3 +6,4 @@ scikit-learn==0.18.1
 scipy==0.19.0
 six==1.10.0
 sklearn>=0.0
+matplotlib>=0.0
