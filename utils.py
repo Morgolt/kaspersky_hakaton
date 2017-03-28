@@ -24,8 +24,10 @@ def test_model(det_model, path='data/test'):
     """
     result = []
     i = 0
-    for tst_file in os.listdir(path):
-        print("testfile")
+    lst = os.listdir(path)
+    lst.sort()
+    for tst_file in lst:
+        print(tst_file)
         test_data = parse_train_data(os.path.join(path, tst_file))
         result.append((i, det_model.test(test_data),))
         i += 1
