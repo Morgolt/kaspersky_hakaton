@@ -1,7 +1,7 @@
+import pickle
+
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-
-import utils
 
 
 def correlation(dataset):
@@ -18,11 +18,22 @@ def normalize_train(trainset):
     scaled_trainset = scaler.fit_transform(trainset)
     ds = pd.DataFrame(scaled_trainset, columns=list(trainset), index=trainset.index)
     ds.to_csv('data/train/normalized.csv')
+    with open('models/scaler.pkl', 'wb') as scalefile:
+        pickle.dump(scaler, scalefile)
     return scaler
 
+def get_scaler():
+    try:
+        with open('models/scaler.pkl', 'rb') as scfile:
+            scaler = pickle.load(scfile)
+        return scaler
+    except:
+        raise IOError('Call "normalize_train(trainset) first."')
 
 
 if __name__ == '__main__':
-    data = utils.parse_train_data()
-    print(data)
-    normalize_train(data)
+    ##data = utils.parse_train_data()
+    #print(data)
+    #normalize_train(data)
+    scaler = get_scaler()
+    print(scaler.scale_)

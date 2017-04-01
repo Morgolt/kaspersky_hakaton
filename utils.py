@@ -3,7 +3,7 @@ import os
 
 import pandas as pd
 
-from AbstractModel import AbstractModel
+import normalization
 
 
 def parse_train_data(path='data/train.csv'):
@@ -14,6 +14,7 @@ def parse_train_data(path='data/train.csv'):
     """
     data = pd.read_csv(path, index_col=0)
     return data
+
 
 def test_model(det_model, path='data/test'):
     """
@@ -27,8 +28,6 @@ def test_model(det_model, path='data/test'):
     for tst_file in tests:
         test_data = pd.read_csv(os.path.join(path, tst_file), index_col=0)
         res = det_model.test(test_data)
-        print(tst_file)
-        print(res)
         result.append((i, res,))
         i += 1
 
@@ -36,6 +35,7 @@ def test_model(det_model, path='data/test'):
         writer = csv.writer(output, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerows(result)
+
 
 def mean_all_answers():
     frames = []
@@ -47,8 +47,27 @@ def mean_all_answers():
     print(result)
     result.to_csv('output/meaned.csv')
 
+
+def fix_test(path='data/test'):
+    tests = sorted(os.listdir(path))
+    right_order = ['tag00', 'tag01', 'tag04', 'tag05', 'tag06', 'tag07', 'tag08', 'tag09', 'tag10', 'tag11', 'tag12',
+                   'tag13', 'tag02', 'tag15', 'tag16', 'tag17', 'tag18']
+    scaler = normalization.get_scaler()
+    for testfile in tests:
+        print(testfile)
+        test_data = pd.read_csv(os.path.join(path, testfile), index_col=0)
+        test_data = test_data[right_order]
+        test_data.fillna(method='pad', inplace=True)
+        test_data.to_csv(os.path.join('data/test_fixed', testfile))
+        scaled = scaler.transform(test_data)
+        scaled = pd.DataFrame(scaled, columns=right_order, index=test_data.index)
+        scaled.to_csv(os.path.join('data/test_norm', testfile))
+
+
+
 if __name__ == '__main__':
     # parse_data('data/train.csv')
-    model = AbstractModel()
-    test_model(model, 'data/test')
+    #model = AbstractModel()
+    #test_model(model, 'data/test')
     # mean_all_answers()
+    fix_test()
