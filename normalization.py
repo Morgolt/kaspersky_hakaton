@@ -1,8 +1,7 @@
-import pandas as pd
-from sklearn.preprocessing import scale
+import pickle
 
-import utils
-import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
 
 
 def correlation(dataset):
@@ -14,15 +13,27 @@ def make_correlation_free_set(dataset):
     dataset.to_csv('data/train_reduced.csv', mode='w+')
 
 
-def z_normalize(dataset):
-    #time = dataset['Time']
-    #dataset.drop('Time', axis=1, inplace=True)
-    scaled = scale(dataset)
-    ds = pd.DataFrame(scaled[0:, 0:], columns=list(dataset), index=dataset.index)
-    ds.to_csv('data/train_normalized.csv')
+def normalize_train(trainset):
+    scaler = StandardScaler()
+    scaled_trainset = scaler.fit_transform(trainset)
+    ds = pd.DataFrame(scaled_trainset, columns=list(trainset), index=trainset.index)
+    ds.to_csv('data/train/normalized.csv')
+    with open('models/scaler.pkl', 'wb') as scalefile:
+        pickle.dump(scaler, scalefile)
+    return scaler
+
+def get_scaler():
+    try:
+        with open('models/scaler.pkl', 'rb') as scfile:
+            scaler = pickle.load(scfile)
+        return scaler
+    except:
+        raise IOError('Call "normalize_train(trainset) first."')
 
 
 if __name__ == '__main__':
-    data = utils.parse_train_data()
-    print(data)
-    z_normalize(data)
+    ##data = utils.parse_train_data()
+    #print(data)
+    #normalize_train(data)
+    scaler = get_scaler()
+    print(scaler.scale_)
