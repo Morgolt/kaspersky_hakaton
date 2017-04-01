@@ -6,6 +6,7 @@ class AbstractModel:
         :param dataset: Pandas DataFrame
         :return: float timestamp
         """
+        print(list(dataset))
         return dataset.index[0]
 
     def __repr__(self):

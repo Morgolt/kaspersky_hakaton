@@ -15,7 +15,6 @@ def parse_train_data(path='data/train.csv'):
     data = pd.read_csv(path, index_col=0)
     return data
 
-
 def test_model(det_model, path='data/test'):
     """
     Writes results file under the name of model
@@ -52,4 +51,4 @@ if __name__ == '__main__':
     # parse_data('data/train.csv')
     model = AbstractModel()
     test_model(model, 'data/test')
-    mean_all_answers()
+    # mean_all_answers()
