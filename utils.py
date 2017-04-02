@@ -26,6 +26,7 @@ def test_model(det_model, path='data/test'):
     i = 0
     tests = sorted(os.listdir(path))
     for tst_file in tests:
+        print(tst_file)
         test_data = pd.read_csv(os.path.join(path, tst_file), index_col=0)
         res = det_model.test(test_data)
         result.append((i, res,))
